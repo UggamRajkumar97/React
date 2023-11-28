@@ -10,7 +10,7 @@ class PageData extends Component {
         <ul class="pagination">
             {num.map((each)=>{
                 return(
-                    <li class="page-item"><a class="page-link" href="#">{each}</a></li>
+                    <li  onClick={()=>this.props.pageChange(each)} class="page-item"><a class="page-link">{each}</a></li>
                 )
             })}
 

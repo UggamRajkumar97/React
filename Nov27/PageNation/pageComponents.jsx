@@ -1,53 +1,28 @@
 import React, { Component } from 'react'
 import PageData from './unoPage';
+import { getData } from './pageData';
+import _ from 'lodash';
 
 class Page extends Component {
     state = { 
-        perPage:3,
-        std:[
-            {
-                "id":101,
-                "name":"Karna",
-                "age":25
-            },
-            {
-                "id":102,
-                "name":"Dharma",
-                "age":25
-            },
-            {
-                "id":103,
-                "name":"Bheema",
-                "age":25
-            },
-            {
-                "id":104,
-                "name":"Arjuna",
-                "age":25
-            },
-            {
-                "id":105,
-                "name":"Nakula",
-                "age":25
-            },
-            {
-                "id":106,
-                "name":"Sahadev",
-                "age":25
-            },
-            {
-                "id":107,
-                "name":"Duryodhana",
-                "age":25
-            },
-            {
-                "id":108,
-                "name":"Dhusyasana",
-                "age":25
-            }
-        ]
+        perPage:2,
+        std: getData(),
+        currentPage:1
      } 
+     pageClick=page=>{
+        console.log(page+'  Clicked')
+        this.setState({currentPage:page})
+     }
+     pageFilterRecords() {
+        const startIndex = ( this.state.currentPage - 1) * this.state.perPage;
+        return _(this.state.std)
+          .slice(startIndex)
+          .take(this.state.perPage)
+          .value();
+      
+    }
     render() { 
+        // const allstuPerPage = this.pageFilterRecords();
         return (
             <div>
                 <table class="table">
@@ -60,7 +35,7 @@ class Page extends Component {
             </thead>
             <tbody>
                 {
-                    this.state.std.map(
+                    this.pageFilterRecords().map(
                         eachStd=> <tr>
                         <th scope="row">{eachStd.id}</th>
                         <td>{eachStd.name}</td>
@@ -70,7 +45,9 @@ class Page extends Component {
                 }
             </tbody>
             </table>
-            <PageData totalData={this.state.std.length} pageCount={this.state.perPage}></PageData>
+            <PageData totalData={this.state.std.length} 
+            pageCount={this.state.perPage} 
+            pageChange={this.pageClick}></PageData>
             </div>
         );
     }
